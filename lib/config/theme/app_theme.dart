@@ -9,6 +9,7 @@ class AppTheme{
       onPrimary: ColorsManager.white,
     ),
     appBarTheme: AppBarTheme(
+      elevation: 0,
       backgroundColor: ColorsManager.blue,
       titleTextStyle: LightAppStyle.appBar,
     ),

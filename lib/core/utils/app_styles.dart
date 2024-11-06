@@ -44,4 +44,12 @@ class LightAppStyle{
       fontSize: 14,
       fontWeight: FontWeight.w400,
       color: ColorsManager.black);
+  static TextStyle calenderSelectedDate = TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w700,
+      color: ColorsManager.blue);
+  static TextStyle calenderUnSelectedDate = TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w700,
+      color: ColorsManager.black);
 }

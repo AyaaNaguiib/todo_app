@@ -8,7 +8,16 @@ class AddTaskBottomSheet extends StatefulWidget {
   State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
 
   static void show(context){
-    showModalBottomSheet(context: context, builder: (context) => AddTaskBottomSheet());
+    showModalBottomSheet(
+      isScrollControlled: true,
+        context: context,
+        builder: (context){
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: AddTaskBottomSheet(),
+        );
+        }
+    );
   }
 }
 
