@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/core/utils/app_styles.dart';
-import 'package:todo_app/core/utils/colors_manager.dart';
-
-
-typedef OnChanged = void Function(String?);
+import 'package:provider/provider.dart';
+import '../../../../../core/utils/colors_manager.dart';
+import '../../../../../providers/theme_provider.dart';
 
 class SettingsTab extends StatefulWidget {
-  SettingsTab({super.key});
-
   @override
   State<SettingsTab> createState() => _SettingsTabState();
 }
@@ -18,44 +14,34 @@ class _SettingsTabState extends State<SettingsTab> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Theme',
-            style: LightAppStyle.themeLabel,
-          ),
-          SizedBox(
-            height: 4,
-          ),
+          Text('Theme', style: themeProvider.themeLabelStyle),
+          const SizedBox(height: 4),
           buildSettingsTabComponent(
-            'Light', 
+            'Light',
             'Dark',
-            selectedTheme,
+            themeProvider.themeMode == ThemeMode.light ? 'Light' : 'Dark',
                 (newTheme) {
-              selectedTheme = newTheme ?? selectedTheme;
-              setState(() {});
+              themeProvider.setTheme(newTheme == 'Light' ? ThemeMode.light : ThemeMode.dark);
             },
           ),
-          SizedBox(
-            height: 12,
-          ),
-          Text(
-            'Language',
-            style: LightAppStyle.themeLabel,
-          ),
-          SizedBox(
-            height: 4,
-          ),
+          const SizedBox(height: 12),
+          Text('Language', style: themeProvider.themeLabelStyle),
+          const SizedBox(height: 4),
           buildSettingsTabComponent(
             'English',
             'Arabic',
             selectedLang,
                 (newLang) {
-              selectedLang = newLang ?? selectedLang;
-              setState(() {});
+              setState(() {
+                selectedLang = newLang ?? selectedLang;
+              });
             },
           ),
         ],
@@ -63,34 +49,39 @@ class _SettingsTabState extends State<SettingsTab> {
     );
   }
 
-  Widget buildSettingsTabComponent(
-      String item1, String item2, String textView, OnChanged onChanged) {
+
+
+Widget buildSettingsTabComponent(String item1, String item2, String textView, ValueChanged<String?> onChanged) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
-        height: 48,
-        padding: EdgeInsets.all(6),
-        decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onPrimary,
-            border: Border.all(width: 1, color: ColorsManager.blue)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(textView, style: LightAppStyle.selectedThemeLabel),
-            DropdownButton<String>(
-              underline: SizedBox(),
-              borderRadius: BorderRadius.circular(12),
-              items: <String>[item1, item2].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: onChanged,
-            ),
-          ],
-        ));
+      height: 48,
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.onPrimary,
+        border: Border.all(width: 1, color: ColorsManager.blue),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(textView, style: themeProvider.selectedThemeLabelStyle),
+          DropdownButton<String>(
+            value: textView,
+            underline: const SizedBox(),
+            borderRadius: BorderRadius.circular(12),
+            items: <String>[item1, item2].map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: onChanged,
+          ),
+        ],
+      ),
+    );
   }
 }
-
 class MenuItem {
   String item1;
   String item2;
